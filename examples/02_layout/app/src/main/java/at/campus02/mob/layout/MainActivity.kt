@@ -37,9 +37,15 @@ class MainActivity : AppCompatActivity() {
         binding.clickMeButton.setOnClickListener {
             // Zuweisen eines neuen Texts auf einen TextView
             // (man wird es nur nicht lange sehen, weil die Activity gewechselt wird).
-            binding.displayView.text = "I have been clicked!"
+            binding.displayView.text = "Click me to see the flex-layout-version!"
 
             val intent = Intent(this, CategoryActivity::class.java)
+            startActivity(intent)
+        }
+
+        // misuse of the displayView to navigate to the Flex-version of the category Layout.
+        binding.displayView.setOnClickListener {
+            val intent = Intent(this, FlexCategoryActivity::class.java)
             startActivity(intent)
         }
     }
