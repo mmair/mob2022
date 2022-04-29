@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Layout</string>
+    <string name="click_me_label">Click me</string>
+    <string name="dummyText">A new activity!</string>
+</resources>
