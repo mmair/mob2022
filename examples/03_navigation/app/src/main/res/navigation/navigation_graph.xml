@@ -18,5 +18,14 @@
         android:id="@+id/categoryScreenFragment"
         android:name="at.campus02.mob.navigation.CategoryScreenFragment"
         android:label="fragment_category_screen"
-        tools:layout="@layout/fragment_category_screen" />
+        tools:layout="@layout/fragment_category_screen" >
+        <action
+            android:id="@+id/action_categoryScreenFragment_to_gameScreenFragment"
+            app:destination="@id/gameScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameScreenFragment"
+        android:name="at.campus02.mob.navigation.GameScreenFragment"
+        android:label="fragment_game_screen"
+        tools:layout="@layout/fragment_game_screen" />
 </navigation>

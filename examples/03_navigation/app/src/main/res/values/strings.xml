@@ -7,4 +7,8 @@
     <string name="scienceLabel">Science</string>
     <string name="generalLabel">General</string>
     <string name="computerLabel">Computer</string>
+    <string name="buttonALabel">Button A</string>
+    <string name="buttonBLabel">Button B</string>
+    <string name="buttonCLabel">Button C</string>
+    <string name="buttonDLabel">Button D</string>
 </resources>
