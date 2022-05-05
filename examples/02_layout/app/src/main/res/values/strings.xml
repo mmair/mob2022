@@ -5,4 +5,6 @@
     <string name="historyLabel">History</string>
     <string name="generalLabel">General</string>
     <string name="computerLabel">Computer</string>
+    <string name="displayViewLabel">Click me to see the flex-layout-version!</string>
+    <string name="displayViewLabelOld">I have been clicked (old)!</string>
 </resources>

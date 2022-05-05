@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         // OnClickListener zuweisen (es gibt mehrere Methoden, siehe dazu Skriptum)
         // -> das hier ist die "Lambda"-Methode
         clickMeButton.setOnClickListener {
-            displayView.text = "I have been clicked (old)!"
+            displayView.text = getString(R.string.displayViewLabelOld)
         }
 
         // Zugriff mittels viewBinding
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         binding.clickMeButton.setOnClickListener {
             // Zuweisen eines neuen Texts auf einen TextView
             // (man wird es nur nicht lange sehen, weil die Activity gewechselt wird).
-            binding.displayView.text = "Click me to see the flex-layout-version!"
+            binding.displayView.text = getString(R.string.displayViewLabel)
 
             val intent = Intent(this, CategoryActivity::class.java)
             startActivity(intent)
