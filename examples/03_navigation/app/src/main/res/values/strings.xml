@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Navigation</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="startButtonLabel">Start Quiz</string>
+    <string name="historyLabel">History</string>
+    <string name="scienceLabel">Science</string>
+    <string name="generalLabel">General</string>
+    <string name="computerLabel">Computer</string>
+</resources>
