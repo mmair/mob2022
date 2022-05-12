@@ -42,6 +42,9 @@ class GameFragment : Fragment() {
             binding.progressBar.progress = progressValue
             binding.progressBar.visibility = if (progressValue > 0) View.VISIBLE else View.INVISIBLE
         }
+        gameViewModel.score.observe(this) { score ->
+            binding.continueButtonLabel.text = score ?: getString(R.string.continue_button_label)
+        }
 
         // User Aktionen
         binding.button1Layout.setOnClickListener {
