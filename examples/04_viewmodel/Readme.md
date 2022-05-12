@@ -24,3 +24,12 @@ Es soll Schritt für Schritt die Logik des Quiz-Spiels für das ``GameFragment``
 * Erweitern Sie dann das ``GameViewModel`` auf 10 Fragen.
 * Wenn eine Frage beantwortet ist, soll durch Klick auf den ``Continue``-Button die nächste Frage angezeigt werden.
 * Bei der Beantwortung einer Frage soll ein Timer gestartet werden und die verbleibende Ratezeit über den ProgresssBar im ``GameFragment`` angezeigt werden. Nach Ablauf der Ratezeit soll die Frage als falsch beantwortet bewertet werden, falls sie nicht durch den Benutzer beantwortet wurde.
+* Nach Beantwortung der letzten Frage soll auf dem ``Continue``-Button anstelle des Labels ein Score angezeigt werden.
+  Und zwar im Format "Score: 3 / 10 correct".
+* Update der Hintergründe im Header:
+    - Die aktuelle unbeantwortete Frage soll mit blauem Hintergrund angezeigt werden
+    - Die aktuelle falsch beantwortete Frage soll mit blauem Hintergrund und rotem Rand angezeigt werden
+    - Die aktuelle richtig beantwortete Frage soll mit blauem Hintergrund und grünem Rand angezeigt werden
+    - Falsch beantwortete Fragen (nicht aktuell) sollen mit rotem Hintergrund angezeigt werden 
+    - Richtig beantwortete Fragen (nicht aktuell) sollen mit grünem Hintergrund angezeigt werden 
+    - Unbeantwortete Fragen (nicht aktuell) sollen mit grauem Hintergrund angezeigt werden 

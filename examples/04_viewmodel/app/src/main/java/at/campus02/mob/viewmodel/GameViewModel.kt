@@ -113,6 +113,7 @@ class GameViewModel : ViewModel() {
         if (question.value?.isAnswered != true) {
             question.value?.choose(choice)
             updateButtonMarkers()
+            guessingCountDownTimer.cancel()
         }
     }
 
@@ -134,8 +135,7 @@ class GameViewModel : ViewModel() {
             guessingProgressMutable.value = 100
             countDownTimer = object : CountDownTimer(10_000, 500) {
                 override fun onTick(remainingMillis: Long) {
-                    // TODO: Logik für ProgressBar Update
-                    guessingProgressMutable.value = 43
+                    guessingProgressMutable.value = ((remainingMillis / 10_000.0) * 100).toInt()
                 }
 
                 override fun onFinish() {
@@ -148,6 +148,7 @@ class GameViewModel : ViewModel() {
         }
 
         fun cancel() {
+            guessingProgressMutable.value = 0
             countDownTimer.cancel()
         }
     }

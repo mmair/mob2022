@@ -40,6 +40,7 @@ class GameFragment : Fragment() {
         }
         gameViewModel.guessingProgress.observe(this) { progressValue ->
             binding.progressBar.progress = progressValue
+            binding.progressBar.visibility = if (progressValue > 0) View.VISIBLE else View.INVISIBLE
         }
 
         // User Aktionen
