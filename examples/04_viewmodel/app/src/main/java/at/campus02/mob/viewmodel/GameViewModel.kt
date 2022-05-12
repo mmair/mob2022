@@ -1,11 +1,12 @@
 package at.campus02.mob.viewmodel
 
+import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 enum class Choice {
-    A, B, C, D
+    A, B, C, D, NONE
 }
 
 data class Question(
@@ -89,11 +90,13 @@ class GameViewModel : ViewModel() {
         Choice.C to R.drawable.button_background,
         Choice.D to R.drawable.button_background,
     ))
+    private var guessingProgressMutable: MutableLiveData<Int> = MutableLiveData(0)
 
     // von außen sichtbar, aber nicht veränderbar
     val questions: LiveData<List<Question>> get() = questionsMutable
     val question: LiveData<Question> get() = questionMutable
     val buttonMarkers: LiveData<Map<Choice, Int>> get() = buttonMarkersMutable
+    val guessingProgress: LiveData<Int> get() = guessingProgressMutable
 
     // index auf den Fragen
     private var index = 0
@@ -102,6 +105,8 @@ class GameViewModel : ViewModel() {
     fun start() {
         questionsMutable.value = theQuestions
         questionMutable.value = questionsMutable.value?.get(index)
+        updateButtonMarkers()
+        guessingCountDownTimer.start()
     }
 
     fun chooseAnswer(choice: Choice) {
@@ -115,9 +120,35 @@ class GameViewModel : ViewModel() {
         if (question.value?.isAnswered == true) {
             index++
             if (index < (questions.value?.size ?: 0)) {
-                questionMutable.value = questions.value?.get(index)
+                questionMutable.value = questionsMutable.value?.get(index)
                 updateButtonMarkers()
+                guessingCountDownTimer.start()
             }
+        }
+    }
+
+    private val guessingCountDownTimer = object {
+        private lateinit var countDownTimer: CountDownTimer
+
+        fun start() {
+            guessingProgressMutable.value = 100
+            countDownTimer = object : CountDownTimer(10_000, 500) {
+                override fun onTick(remainingMillis: Long) {
+                    // TODO: Logik für ProgressBar Update
+                    guessingProgressMutable.value = 43
+                }
+
+                override fun onFinish() {
+                    guessingProgressMutable.value = 0
+                    if (question.value?.isAnswered == false)
+                        chooseAnswer(Choice.NONE)
+                }
+            }
+            countDownTimer.start()
+        }
+
+        fun cancel() {
+            countDownTimer.cancel()
         }
     }
 

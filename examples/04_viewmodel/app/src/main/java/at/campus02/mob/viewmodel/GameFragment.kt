@@ -38,6 +38,9 @@ class GameFragment : Fragment() {
             binding.button3Layout.setBackgroundResource(buttonMarkerMap[Choice.C] ?: R.drawable.button_background)
             binding.button4Layout.setBackgroundResource(buttonMarkerMap[Choice.D] ?: R.drawable.button_background)
         }
+        gameViewModel.guessingProgress.observe(this) { progressValue ->
+            binding.progressBar.progress = progressValue
+        }
 
         // User Aktionen
         binding.button1Layout.setOnClickListener {
