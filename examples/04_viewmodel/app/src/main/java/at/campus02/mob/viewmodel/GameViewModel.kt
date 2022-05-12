@@ -92,6 +92,7 @@ class GameViewModel : ViewModel() {
     ))
     private var guessingProgressMutable: MutableLiveData<Int> = MutableLiveData(0)
     private var scoreMutable: MutableLiveData<String> = MutableLiveData()
+    private var progressMarkersMutable: MutableLiveData<List<Int>> = MutableLiveData()
 
     // von außen sichtbar, aber nicht veränderbar
     val questions: LiveData<List<Question>> get() = questionsMutable
@@ -99,6 +100,7 @@ class GameViewModel : ViewModel() {
     val buttonMarkers: LiveData<Map<Choice, Int>> get() = buttonMarkersMutable
     val guessingProgress: LiveData<Int> get() = guessingProgressMutable
     val score: LiveData<String> get() = scoreMutable
+    val progressMarkers: LiveData<List<Int>> get() = progressMarkersMutable
 
     // index auf den Fragen
     private var index = 0
@@ -109,6 +111,7 @@ class GameViewModel : ViewModel() {
         questionsMutable.value = theQuestions
         questionMutable.value = questionsMutable.value?.get(index)
         updateButtonMarkers()
+        updateProgressMarkers()
         updateScore()
         guessingCountDownTimer.start()
     }
@@ -117,6 +120,7 @@ class GameViewModel : ViewModel() {
         if (question.value?.isAnswered != true) {
             question.value?.choose(choice)
             updateButtonMarkers()
+            updateProgressMarkers()
             guessingCountDownTimer.cancel()
             updateScore()
         }
@@ -128,6 +132,7 @@ class GameViewModel : ViewModel() {
             if (index < (questions.value?.size ?: 0)) {
                 questionMutable.value = questionsMutable.value?.get(index)
                 updateButtonMarkers()
+                updateProgressMarkers()
                 guessingCountDownTimer.start()
             }
         }
@@ -191,6 +196,31 @@ class GameViewModel : ViewModel() {
             !question.isCorrect && choice == question.choice -> R.drawable.button_background_incorrect
             // falls kein anderer Fall zuständig ist: neutral
             else -> R.drawable.button_background
+        }
+    }
+
+    private fun updateProgressMarkers() {
+        progressMarkersMutable.value = listOf(
+            progressResourceFor(0),
+            progressResourceFor(1),
+            progressResourceFor(2),
+            progressResourceFor(3),
+            progressResourceFor(4),
+            progressResourceFor(5),
+            progressResourceFor(6),
+            progressResourceFor(7),
+            progressResourceFor(8),
+            progressResourceFor(9),
+        )
+    }
+
+    private fun progressResourceFor(index: Int): Int {
+        val progressQuestion = questions.value?.get(index)
+        // TODO: Logik implementieren (analog zu den Buttons)
+        return when {
+            progressQuestion == null -> R.drawable.progress_unanswered
+            progressQuestion == question.value -> R.drawable.progress_current
+            else -> R.drawable.progress_unanswered
         }
     }
 }
