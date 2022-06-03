@@ -4,6 +4,9 @@ import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 enum class Choice {
     A, B, C, D, NONE
@@ -107,13 +110,30 @@ class GameViewModel : ViewModel() {
 
     // User Aktionen
     fun start() {
-        index = 0
-        questionsMutable.value = theQuestions
-        questionMutable.value = questionsMutable.value?.get(index)
-        updateButtonMarkers()
-        updateProgressMarkers()
-        updateScore()
-        guessingCountDownTimer.start()
+
+        // REST access mit "Call" Interface
+        triviaDbApi.getQuestions().enqueue(object: Callback<QuestionsResponse> {
+            override fun onResponse(
+                call: Call<QuestionsResponse>,
+                response: Response<QuestionsResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val questionsFromServer = response.body()?.results
+                    index = 0
+                    questionsMutable.value = questionsFromServer
+                    questionMutable.value = questionsMutable.value?.get(index)
+                    updateButtonMarkers()
+                    updateProgressMarkers()
+                    updateScore()
+                    guessingCountDownTimer.start()
+                }
+            }
+
+            override fun onFailure(call: Call<QuestionsResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+
     }
 
     fun chooseAnswer(choice: Choice) {
