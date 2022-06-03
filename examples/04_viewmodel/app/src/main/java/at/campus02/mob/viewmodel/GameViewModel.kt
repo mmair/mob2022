@@ -215,11 +215,22 @@ class GameViewModel : ViewModel() {
     }
 
     private fun progressResourceFor(index: Int): Int {
+        // Die Frage, die dem Progress-Indikator mit diesem Index entspricht
         val progressQuestion = questions.value?.get(index)
-        // TODO: Logik implementieren (analog zu den Buttons)
         return when {
+            // keine passende Frage -> neutraler Hintergrund
             progressQuestion == null -> R.drawable.progress_unanswered
-            progressQuestion == question.value -> R.drawable.progress_current
+            // header für die aktuelle Frage, noch unbeantwortet
+            progressQuestion == question.value && !progressQuestion.isAnswered -> R.drawable.progress_current
+            // header für die aktuelle Frage,  falsch beantwortet
+            progressQuestion == question.value && !progressQuestion.isCorrect -> R.drawable.progress_current_incorrect
+            // header für die aktuelle Frage,  richtig beantwortet
+            progressQuestion == question.value && progressQuestion.isCorrect -> R.drawable.progress_current_correct
+            // header für bereits beantwortete Frage,  richtig beantwortet
+            progressQuestion.isAnswered && progressQuestion.isCorrect -> R.drawable.progress_correct
+            // header für bereits beantwortete Frage,  falsch beantwortet
+            progressQuestion.isAnswered && !progressQuestion.isCorrect -> R.drawable.progress_incorrect
+            // falls nichts anderes zuschlägt
             else -> R.drawable.progress_unanswered
         }
     }
