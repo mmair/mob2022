@@ -46,5 +46,8 @@ Wir verwenden dazu die frei verfügbare Quiz-Datenbank [Open Trivia Database](ht
 * Definieren des API (Interface) für den Zugriff auf die TriviaDb Schnittstelle (über die gefundene URL).
 * Konfigurieren und bauen der API Implementierung mittels Retrofit Builder.
 * Verwenden des APIs im ``GameViewModel``, um die Fragen bei Start des Spiels zu laden. 
-	* Bei Verwendung von ``suspend`` functions darf das nicht im Main-Thread erfolgen!
+    * Bei Verwendung von ``suspend`` functions darf das nicht im Main-Thread erfolgen!
 * Aufräumen: Die vordefinierte Liste der Fragen (``theQuestions``) entfernen.
+* Error-Handling: Bei Fehlern während der Kommunikation mit dem Rest API soll eine entsprechende Fehlermeldung 
+  (weiß auf rotem Hintergrund) angezeigt werden.
+
