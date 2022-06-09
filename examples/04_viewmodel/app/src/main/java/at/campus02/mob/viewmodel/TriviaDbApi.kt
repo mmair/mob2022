@@ -1,6 +1,10 @@
 package at.campus02.mob.viewmodel
 
 import com.squareup.moshi.Moshi
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -24,16 +28,25 @@ interface TriviaDbApi {
     suspend fun getQuestionsWithCoroutines(@Query("amount") amount: Int): Response<QuestionsResponse>
 }
 
-val triviaDbApi = Retrofit.Builder()
-    // JSON converter: Moshi, keine zusätzlichen eigenen Converter
-    .addConverterFactory(
-        MoshiConverterFactory.create(
-            Moshi.Builder().build()
-        )
-    )
-    // BASE URL des API
-    .baseUrl("https://opentdb.com/")
-    // Konfiguration bauen
-    .build()
-    // API Interface implementieren lassen
-    .create(TriviaDbApi::class.java)
+// Wir müssen dem DI Framework irgendwie beibringen, ein TriviaDbApi erzeugen zu können
+@Module
+@InstallIn(ViewModelComponent::class)
+object TriviaDbApiModule {
+
+    @Provides
+    fun getTriviaDbApi() : TriviaDbApi {
+        return Retrofit.Builder()
+            // JSON converter: Moshi, keine zusätzlichen eigenen Converter
+            .addConverterFactory(
+                MoshiConverterFactory.create(
+                    Moshi.Builder().build()
+                )
+            )
+            // BASE URL des API
+            .baseUrl("https://opentdb.com/")
+            // Konfiguration bauen
+            .build()
+            // API Interface implementieren lassen
+            .create(TriviaDbApi::class.java)
+    }
+}
