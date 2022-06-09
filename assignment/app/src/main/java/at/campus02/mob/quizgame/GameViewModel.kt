@@ -57,7 +57,8 @@ data class Question(
 // injiziert) und trotzdem via "by activityViewModels()" im Fragment geholt werden.
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    val questionRepository: QuestionRepository
+    val questionRepository: QuestionRepository,
+    val preferencesRepository: PreferencesRepository
 ): ViewModel() {
 
     // ---------------------------------------------------------------------------------------------
@@ -143,10 +144,11 @@ class GameViewModel @Inject constructor(
         private lateinit var countDownTimer: CountDownTimer
 
         fun start() {
+            val timeInMs = preferencesRepository.getTimerDuration()
             guessingProgressMutable.value = 100
-            countDownTimer = object : CountDownTimer(10_000, 500) {
+            countDownTimer = object : CountDownTimer(timeInMs, 500) {
                 override fun onTick(remainingMillis: Long) {
-                    guessingProgressMutable.value = ((remainingMillis / 10_000.0) * 100).toInt()
+                    guessingProgressMutable.value = ((remainingMillis / timeInMs.toDouble()) * 100).toInt()
                 }
 
                 override fun onFinish() {
