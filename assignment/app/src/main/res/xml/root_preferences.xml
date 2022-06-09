@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="@string/timer_header">
+
+        <SeekBarPreference
+            app:key="timer_duration"
+            app:title="@string/timer_title"
+            android:max="40"
+            android:defaultValue="20"
+            app:seekBarIncrement="2"
+            app:adjustable="true"
+            app:showSeekBarValue="true"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

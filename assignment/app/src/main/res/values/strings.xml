@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">QuizGame</string>
+    <string name="continue_button_label">Continue</string>
+    <string name="startButtonLabel">Start Quiz</string>
+    <!-- Preference Titles -->
+    <string name="timer_header">Countdown Timer</string>
+    <!-- Timer Preferences -->
+    <string name="timer_title">Timer duration</string>
+    <string name="settingsButtonLabel">Settings</string>
+</resources>
