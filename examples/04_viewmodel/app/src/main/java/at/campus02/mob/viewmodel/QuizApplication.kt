@@ -4,12 +4,13 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 // Einstiegspunkt für DI - Achtung: im Manifest deklarieren!
 @HiltAndroidApp
 class QuizApplication : Application()
 
-class QuestionRepository {
+class QuestionRepository @Inject constructor() {
 
     suspend fun getQuestions(): List<Question> {
         val response = triviaDbApi.getQuestionsWithCoroutines(10)
