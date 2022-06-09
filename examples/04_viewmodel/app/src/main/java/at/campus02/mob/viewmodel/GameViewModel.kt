@@ -4,6 +4,9 @@ import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -79,6 +82,7 @@ class GameViewModel : ViewModel() {
         errorMutable.value = null
 
         // REST access mit "Call" Interface
+        /*
         triviaDbApi.getQuestions().enqueue(object: Callback<QuestionsResponse> {
             override fun onResponse(
                 call: Call<QuestionsResponse>,
@@ -102,6 +106,36 @@ class GameViewModel : ViewModel() {
                 errorMutable.value = "Communication failure: ${t.message}"
             }
         })
+        */
+
+        // REST access mit Kotlin coroutines
+        // viewModelScope.launch -> kümmert sich um anderen Thread
+        viewModelScope.launch {
+            try {
+                val response = triviaDbApi.getQuestionsWithCoroutines(10)
+                if (response.isSuccessful) {
+                    // MainScope.launch -> wieder in den UI Thread
+                    MainScope().launch {
+                        val questionsFromServer = response.body()?.results
+                        index = 0
+                        questionsMutable.value = questionsFromServer
+                        questionMutable.value = questionsMutable.value?.get(index)
+                        updateButtonMarkers()
+                        updateProgressMarkers()
+                        updateScore()
+                        guessingCountDownTimer.start()
+                    }
+                } else {
+                    // Achtung: hier sind wir noch im viewModelScope
+                    // -> also entweder wieder MainScope verwenden oder
+                    //    postValue (LiveData kümmert sich dann um das Thread-Handling)
+                    errorMutable.postValue("Error when fetching questions: ${response.message()}")
+                }
+            } catch (exc: Exception) {
+                // Communication Failures
+                errorMutable.postValue("Communication failure: ${exc.message}")
+            }
+        }
 
     }
 
