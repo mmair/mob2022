@@ -52,4 +52,4 @@ Wir verwenden dazu die frei verfügbare Quiz-Datenbank [Open Trivia Database](ht
   (weiß auf rotem Hintergrund) angezeigt werden.
 * Umstellen des API von "Call" auf Kotlin coroutines.
   * Einführen eines Query-Parameters für die Anzahl der Fragen (wir verwenden immer 10).
-
+* Umstellen auf Dependency Injection und Repository

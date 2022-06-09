@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import at.campus02.mob.viewmodel.databinding.FragmentStartBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StartFragment : Fragment() {
 
     private lateinit var binding: FragmentStartBinding

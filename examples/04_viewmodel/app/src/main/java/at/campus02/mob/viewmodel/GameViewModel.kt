@@ -48,7 +48,9 @@ data class Question(
     val isCorrect get() = isAnswered && choice == correctChoice
 }
 
-class GameViewModel : ViewModel() {
+class GameViewModel(
+    val questionRepository: QuestionRepository // Dependency Injection via Constructor
+) : ViewModel() {
 
     // intern, veränderbar
     private var questionsMutable: MutableLiveData<List<Question>> = MutableLiveData()
@@ -81,6 +83,29 @@ class GameViewModel : ViewModel() {
 
         errorMutable.value = null
 
+        // -----------------------------------------------------------------------------------------
+        // mit Dependency Injection (Verwendung des QuestionRepository aus dem Konstruktor)
+        // -----------------------------------------------------------------------------------------
+        viewModelScope.launch {
+            try {
+                val questionsFromServer = questionRepository.getQuestions()
+                MainScope().launch {
+                    index = 0
+                    questionsMutable.value = questionsFromServer
+                    questionMutable.value = questionsMutable.value?.get(index)
+                    updateButtonMarkers()
+                    updateProgressMarkers()
+                    updateScore()
+                    guessingCountDownTimer.start()
+                }
+            } catch (exc: Exception) {
+                errorMutable.postValue(exc.message)
+            }
+        }
+
+        // -----------------------------------------------------------------------------------------
+        // ohne Dependency Injection (Verwendung des globalen triviaDbAPi Objekts)
+        // -----------------------------------------------------------------------------------------
         // REST access mit "Call" Interface
         /*
         triviaDbApi.getQuestions().enqueue(object: Callback<QuestionsResponse> {
@@ -110,6 +135,7 @@ class GameViewModel : ViewModel() {
 
         // REST access mit Kotlin coroutines
         // viewModelScope.launch -> kümmert sich um anderen Thread
+/*
         viewModelScope.launch {
             try {
                 val response = triviaDbApi.getQuestionsWithCoroutines(10)
@@ -136,7 +162,7 @@ class GameViewModel : ViewModel() {
                 errorMutable.postValue("Communication failure: ${exc.message}")
             }
         }
-
+*/
     }
 
     fun chooseAnswer(choice: Choice) {
