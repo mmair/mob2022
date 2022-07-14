@@ -1,3 +1,11 @@
+## Update: Musterlösung
+
+Die Musterlösung befindet sich im Branch "implementation" - einfach diesen Branch auschecken und 
+die App starten.
+
+Der Vollständigkeit halber beinhaltet die Musterlösung auch Beispiele für Unit-Tests des GameViewModel
+(im File ``GameViewModelTest.kt``).
+
 ## Aufgabenstellung
 
 Erweitern Sie unsere Quiz-App um 
