@@ -11,11 +11,11 @@
         android:label="fragment_start"
         tools:layout="@layout/fragment_start" >
         <action
-            android:id="@+id/action_startFragment_to_gameFragment"
-            app:destination="@id/gameFragment" />
-        <action
             android:id="@+id/action_startFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_categoryScreenFragment"
+            app:destination="@id/categoryScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -26,4 +26,13 @@
         android:name="at.campus02.mob.quizgame.GameFragment"
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" />
+    <fragment
+        android:id="@+id/categoryScreenFragment"
+        android:name="at.campus02.mob.quizgame.CategoryScreenFragment"
+        android:label="fragment_category_screen"
+        tools:layout="@layout/fragment_category_screen" >
+        <action
+            android:id="@+id/action_categoryScreenFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
 </navigation>

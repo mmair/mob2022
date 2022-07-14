@@ -8,6 +8,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 // Hilfsdatenklasse für die Antwort vom REST API
 data class QuestionsResponse(
@@ -21,6 +22,9 @@ data class QuestionsResponse(
 interface TriviaDbApi {
     @GET("api.php?amount=10&type=multiple")
     suspend fun getQuestions(): Response<QuestionsResponse>
+
+    @GET("api.php?amount=10&type=multiple")
+    suspend fun getQuestionsForCategory(@Query("category") categoryId: Int): Response<QuestionsResponse>
 }
 
 // -------------------------------------------------------------------------------------------------

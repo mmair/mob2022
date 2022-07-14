@@ -96,5 +96,11 @@ class GameFragment : Fragment() {
         binding.continueButtonLayout.setOnClickListener {
             gameViewModel.next()
         }
+
+        progressIndicators.forEachIndexed { index, view ->
+            view.setOnClickListener {
+                gameViewModel.selectQuestion(index)
+            }
+        }
     }
 }

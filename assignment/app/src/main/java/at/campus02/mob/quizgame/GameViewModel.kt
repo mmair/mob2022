@@ -13,6 +13,20 @@ import javax.inject.Inject
 // -------------------------------------------------------------------------------------------------
 // Datenmodell
 // -------------------------------------------------------------------------------------------------
+enum class Category(val categoryId: Int) {
+    GENERAL(9),
+    HISTORY(23),
+    SCIENCE(17),
+    COMPUTER(18);
+
+    // nur für die Tests gebraucht!
+    companion object {
+        fun fromId(id: Int): Category {
+            return values().find { it.categoryId == id } ?: throw IllegalArgumentException()
+        }
+    }
+}
+
 enum class Choice {
     A, B, C, D, NONE
 }
@@ -94,19 +108,21 @@ class GameViewModel @Inject constructor(
     // ---------------------------------------------------------------------------------------------
     // User Aktionen
     // ---------------------------------------------------------------------------------------------
-    fun start() {
+    fun start(category: Category) {
         errorMutable.value = null
+        guessingCountDownTimer.cancel()
+        questionMutable.value = Question("", "", listOf("", "", ""))
+        questionsMutable.value = listOf()
+        updateMarkers()
         // REST access mit kotlin coroutines
         viewModelScope.launch {
             try {
-                val questionsFromServer = questionRepository.getQuestions()
+                val questionsFromServer = questionRepository.getQuestions(category.categoryId)
                 MainScope().launch {
                     index = 0
                     questionsMutable.value = questionsFromServer
                     questionMutable.value = questionsMutable.value?.get(index)
-                    updateButtonMarkers()
-                    updateProgressMarkers()
-                    updateScore()
+                    updateMarkers()
                     guessingCountDownTimer.start()
                 }
             } catch (exc: Exception) {
@@ -115,13 +131,17 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    private fun updateMarkers() {
+        updateButtonMarkers()
+        updateProgressMarkers()
+        updateScore()
+    }
+
     fun chooseAnswer(choice: Choice) {
         if (question.value?.isAnswered != true) {
             question.value?.choose(choice)
-            updateButtonMarkers()
-            updateProgressMarkers()
+            updateMarkers()
             guessingCountDownTimer.cancel()
-            updateScore()
         }
     }
 
@@ -130,10 +150,18 @@ class GameViewModel @Inject constructor(
             index++
             if (index < (questions.value?.size ?: 0)) {
                 questionMutable.value = questionsMutable.value?.get(index)
-                updateButtonMarkers()
-                updateProgressMarkers()
+                updateMarkers()
                 guessingCountDownTimer.start()
             }
+        }
+    }
+
+    fun selectQuestion(index: Int) {
+        val allQuestions = questionsMutable.value ?: return
+        if (allQuestions.all { it.isAnswered }) {
+            this.index = index
+            questionMutable.value = questionsMutable.value?.get(index)
+            updateMarkers()
         }
     }
 
@@ -162,13 +190,14 @@ class GameViewModel @Inject constructor(
 
         fun cancel() {
             guessingProgressMutable.value = 0
-            countDownTimer.cancel()
+            if (this::countDownTimer.isInitialized)
+                countDownTimer.cancel()
         }
     }
 
     private fun updateScore() {
-        val allQuestions = questionsMutable.value ?: return
-        if (allQuestions.all { it.isAnswered }) {
+        val allQuestions = questionsMutable.value ?: listOf()
+        if (!allQuestions.isEmpty() && allQuestions.all { it.isAnswered }) {
             scoreMutable.value = "Score: ${allQuestions.count { it.isCorrect }} / ${allQuestions.size} correct"
         } else {
             scoreMutable.value = null
@@ -218,7 +247,7 @@ class GameViewModel @Inject constructor(
 
     private fun progressResourceFor(index: Int): Int {
         // Die Frage, die dem Progress-Indikator mit diesem Index entspricht
-        val progressQuestion = questions.value?.get(index)
+        val progressQuestion = questions.value?.getOrNull(index)
         return when {
             // keine passende Frage -> neutraler Hintergrund
             progressQuestion == null -> R.drawable.progress_unanswered

@@ -27,8 +27,7 @@ class StartFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         binding.startButton.setOnClickListener {
-            findNavController().navigate(R.id.action_startFragment_to_gameFragment)
-            gameViewModel.start()
+            findNavController().navigate(R.id.action_startFragment_to_categoryScreenFragment)
         }
         binding.settingsButton.setOnClickListener {
             findNavController().navigate(R.id.action_startFragment_to_settingsFragment)
